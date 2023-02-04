@@ -1,17 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const Registration = sequelize.define("registrations", {
-        fullname: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        mobile_number: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
+    const Login = sequelize.define("logins", {
         userID: {
             type: DataTypes.STRING,
             allowNull: false
@@ -20,12 +8,13 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        confirm_password: {
-            type: DataTypes.STRING,
-            allowNull: false
+        timeStamp: {
+            type: DataTypes.DATETIME,
+            allowNull: false,
+            defaultValue: new Date()
         }
     }, {
         timestamps: false
     })
-    return Registration;
+    return Login;
 }
