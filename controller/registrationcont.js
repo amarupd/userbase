@@ -1,10 +1,10 @@
 const db = require("../models")
 const addUser = db.registrations;
 const loginU = db.logins;
-const sequelize = require('../sequelizetemplate')
+// const sequelize = require('../sequelizetemplate')
 
 
-const { QueryTypes } = require('sequelize');
+// const { QueryTypes } = require('sequelize');
 
 
 
