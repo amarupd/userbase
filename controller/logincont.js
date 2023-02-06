@@ -15,18 +15,34 @@ const credential = async (req, res) => {
     const password = req.body.password
     
    
-    const user = await sequelize.query(`SELECT userID FROM logins WHERE userID =${userID}`,
+    const user = await sequelize.query(`SELECT userID,password FROM logins WHERE userID ='${userID}'`,
     {
         type: QueryTypes.SELECT
     });
-    const pass = await sequelize.query(`SELECT password FROM logins WHERE userID =${userID}`,
+    // const pass = await sequelize.query(`SELECT password FROM logins WHERE userID ='${userID}'`,
+    // {
+    //     type: QueryTypes.SELECT
+    // });
+    
+    
+    let uID = user.map(item => item.userID);
+    const str=uID.toString();
+
+    let pass = user.map(item => item.password);
+    const pstr=pass.toString();
+
+    console.log(str,pstr);
+
+    if(userID==str && password==pstr)
     {
-        type: QueryTypes.SELECT
-    });
-    console.log(user,pass);
-    // res.status(200).send({message:"thank you",data:punchi})
-    // let mappedArray = punchou.map(item => item.totaltime);
-    // const str=mappedArray.toString();
+        res.status(200).send({message:"succesfully login",data:user})
+    }else if(userID!=str)
+    {
+        res.status(400).send({message:"user not found"})
+    }
+    else{
+        res.status(400).send({message:"userID and password didn't match"})
+    }
 
 
 }

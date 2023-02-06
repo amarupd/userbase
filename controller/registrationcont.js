@@ -29,8 +29,11 @@ const adduser = async (req, res) => {
 
     if (password == confirm_password) {
         const emp = await addUser.create(info)
-        res.status(200).send(emp)
+        res.status(200).send({message:"user added succesfully",data:emp})
         const log = await loginU.create(login)
+    }
+    else{
+        res.status(400).send({message:"password didnt match"})
     }
 }
 
