@@ -21,7 +21,8 @@ const adduser = async (req, res) => {
     }
     let login = {
         userID: req.body.userID,
-        password: req.body.password
+        password: req.body.password,
+        timeStamp: req.body.timeStamp
     }
     const password = req.body.password;
     const confirm_password = req.body.confirm_password;
