@@ -10,7 +10,6 @@ const loginU = db.logins;
 
 /********************************************************************************************** */
 const adduser = async (req, res) => {
-    // const id = req.body.id
 
     let info = {
         fullname: req.body.fullname,
@@ -20,13 +19,13 @@ const adduser = async (req, res) => {
         password: req.body.password,
         confirm_password: req.body.confirm_password
     }
-
-    const password = req.body.password;
-    const confirm_password = req.body.confirm_password;
     let login = {
         userID: req.body.userID,
         password: req.body.password
     }
+    const password = req.body.password;
+    const confirm_password = req.body.confirm_password;
+
     if (password == confirm_password) {
         const emp = await addUser.create(info)
         res.status(200).send(emp)
