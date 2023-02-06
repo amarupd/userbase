@@ -28,9 +28,9 @@ const db = {}
 db.Sequelize = Sequelize
 db.sequelize = sequelize
 
-// db.employees = require('./empmodel')(sequelize, DataTypes)
+db.logins = require('./loginmodel')(sequelize, DataTypes)
 
-// db.salaries = require('./salmodel')(sequelize, DataTypes)
+db.registrations = require('./registrationmodel')(sequelize, DataTypes)
 
 // db.timestamps = require('./dailymodel')(sequelize, DataTypes)
 
