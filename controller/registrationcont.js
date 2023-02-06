@@ -1,5 +1,6 @@
 const db = require("../models")
 const addUser = db.registrations;
+const loginU=db.logins;
 const sequelize = require('../sequelizetemplate')
 
 
@@ -19,6 +20,7 @@ const adduser = async (req, res) => {
         password: req.body.password,
         confirm_password: req.body.confirm_password
     }
+    
 const password=req.body.password;
 const confirm_password=req.body.confirm_password;
 if(password==confirm_password)

@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         timeStamp: {
             type: DataTypes.DATETIME,
-            allowNull: false,
+            allowNull: true,
             defaultValue: new Date()
         }
     }, {
