@@ -1,5 +1,5 @@
-const db = require("../model")
-const addUser = db.timestamps;
+const db = require("../models")
+const addUser = db.registrations;
 const sequelize = require('../sequelizetemplate')
 
 
@@ -19,10 +19,18 @@ const adduser = async (req, res) => {
         password: req.body.password,
         confirm_password: req.body.confirm_password
     }
-
+const password=req.body.password;
+const confirm_password=req.body.confirm_password;
+if(password==confirm_password)
+{
     const emp = await addUser.create(info)
     // await Timestamp.update({ punchIN: sequelize.literal('CURRENT_TIMESTAMP') })
     res.status(200).send(emp)
+}
+
+    // const emp = await addUser.create(info)
+    // // await Timestamp.update({ punchIN: sequelize.literal('CURRENT_TIMESTAMP') })
+    // res.status(200).send(emp)
 }
 
 /********************************************************************************************************************************************** */

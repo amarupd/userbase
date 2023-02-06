@@ -1,5 +1,5 @@
-const db = require("../model")
-const loginUser = db.timestamps;
+const db = require("../models")
+const loginUser = db.logins;
 const sequelize = require('../sequelizetemplate')
 
 
