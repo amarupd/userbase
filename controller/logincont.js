@@ -19,11 +19,7 @@ const credential = async (req, res) => {
     {
         type: QueryTypes.SELECT
     });
-    // const pass = await sequelize.query(`SELECT password FROM logins WHERE userID ='${userID}'`,
-    // {
-    //     type: QueryTypes.SELECT
-    // });
-    
+      
     
     let uID = user.map(item => item.userID);
     const str=uID.toString();
