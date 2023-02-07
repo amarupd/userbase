@@ -39,13 +39,7 @@ const credential = async (req, res) => {
     else{
         res.status(400).send({message:"userID and password didn't match"})
     }
-
-
 }
-
-
-
-
 
 module.exports = {
     details,
