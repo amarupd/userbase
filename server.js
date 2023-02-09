@@ -1,6 +1,7 @@
 const express = require("express");
 const router = require("./routes/loginroute");
 const srouter = require("./routes/registrationroutes");
+const lrouter = require("./routes/otproutes");
 // const drouter = require("./routes/dailyroute");
 const cors = require("cors");
 const app = express();
@@ -18,6 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/login", router);
 app.use("/registration", srouter);
+app.use("/otp", lrouter);
 // app.use("/time", drouter);
 app.get("", (req, res) => {
     res.json({ message: "hello from api" });

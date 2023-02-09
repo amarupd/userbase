@@ -32,6 +32,8 @@ db.logins = require('./loginmodel')(sequelize, DataTypes)
 
 db.registrations = require('./registrationmodel')(sequelize, DataTypes)
 
+db.otps = require('./otpmodel')(sequelize, DataTypes)
+
 
 
 db.sequelize.sync({ force: false })
