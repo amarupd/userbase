@@ -1,10 +1,10 @@
 const dailyController=require('../controller/otp')
 
-const drouter=require('express').Router()
+const otprouter=require('express').Router()
 
 
-drouter.get("/getlogin",dailyController.details)
+otprouter.get("/getallotp",dailyController.details)
 
-drouter.post("/getallotp",dailyController.addotp)
+otprouter.post("/addotp",dailyController.addotp)
 
-module.exports=drouter;
+module.exports=otprouter;
