@@ -5,6 +5,6 @@ const drouter=require('express').Router()
 
 drouter.get("/getlogin",dailyController.details)
 
-drouter.get("/credential",dailyController.credential)
+drouter.post("/credential",dailyController.credential)
 
 module.exports=drouter;
