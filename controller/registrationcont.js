@@ -2,6 +2,7 @@ const db = require("../models")
 const addUser = db.registrations;
 const { validateSignup } = require('../validator')
 const loginU = db.logins;
+const bcrypt=require('bcryptjs')
 const Joi = require('joi')
 // const sequelize = require('../sequelizetemplate')
 
@@ -19,13 +20,19 @@ const adduser = async (req, res) => {
         res.send(error.details)
     }
     else{
+
+        const passcode=req.body.password
+        const compPass=req.body.confirm_password
+
+
+
         let info = {
             fullname: req.body.fullname,
             email: req.body.email,
             mobile_number: req.body.mobile_number,
             userID: req.body.userID,
-            password: req.body.password,
-            confirm_password: req.body.confirm_password
+            password: passcode,
+            confirm_password: compPass
         }
         let login = {
             userID: req.body.userID,
