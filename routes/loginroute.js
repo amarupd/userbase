@@ -7,4 +7,6 @@ drouter.get("/getlogin",dailyController.details)
 
 drouter.post("/credential",dailyController.credential)
 
+drouter.post("/mobile",dailyController.otp)
+
 module.exports=drouter;
