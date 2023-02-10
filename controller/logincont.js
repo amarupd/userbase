@@ -2,6 +2,7 @@ const db = require("../models")
 const loginUser = db.logins;
 const addUser = db.registrations;
 const addOtp = db.otps;
+const bcrypt = require('bcryptjs')
 const sequelize = require('../sequelizetempelate')
 
 
@@ -16,7 +17,6 @@ const credential = async (req, res) => {
     const userID = req.body.userID
     const password = req.body.password
 
-
     const user = await sequelize.query(`SELECT userID,password FROM logins WHERE userID ='${userID}'`,
         {
             type: QueryTypes.SELECT
@@ -27,17 +27,20 @@ const credential = async (req, res) => {
     const str = uID.toString();
 
     let pass = user.map(item => item.password);
-    const pstr = pass.toString();
+    const passwordHash = pass.toString();
 
-    console.log(str, pstr);
+    console.log(str, passwordHash);
 
-    if (userID == str && password == pstr) {
+    const compPasswordHash = await bcrypt.compare(password,passwordHash)
+    console.log(compPasswordHash);
+
+    if (userID == str && compPasswordHash == true) {
 
         let times = await addUser.findAll({})
         res.status(200).send({ message: "succesfully login", data: times })
     } else if (userID != str) {
         res.status(400).send({ message: "user not found" })
-    } else if (userID == str && password != pstr) {
+    } else if (userID == str && compPasswordHash != true) {
         res.status(400).send({ message: "Invalid password" })
     }
     else {

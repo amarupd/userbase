@@ -7,4 +7,5 @@ drouter.post("/adduser",dailyController.adduser)
 
 drouter.get("/getdetails",dailyController.details)
 
+
 module.exports=drouter;

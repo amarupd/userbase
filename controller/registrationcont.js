@@ -1,10 +1,11 @@
 const db = require("../models")
 const addUser = db.registrations;
+// const loginUser = db.logins;
 const { validateSignup } = require('../validator')
 const loginU = db.logins;
 const bcrypt = require('bcryptjs')
-const Joi = require('joi')
-// const sequelize = require('../sequelizetemplate')
+// const Joi = require('joi')
+// const sequelize = require('../sequelizetempelate')
 
 
 // const { QueryTypes } = require('sequelize');
@@ -12,6 +13,10 @@ const Joi = require('joi')
 
 
 /********************************************************************************************** */
+
+
+
+
 const adduser = async (req, res) => {
 
     const { error, value } = validateSignup(req.body)
@@ -88,5 +93,4 @@ const details = async (req, res) => {
 module.exports = {
     adduser,
     details
-
 }
