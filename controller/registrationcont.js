@@ -23,7 +23,8 @@ const adduser = async (req, res) => {
 
         const passcode=req.body.password
         const compPass=req.body.confirm_password
-
+            const passwordHash=await bcrypt.hash(passcode,10)
+            console.log(passwordHash);
 
 
         let info = {
