@@ -3,6 +3,7 @@ const { validateSignup } = require('../validato')
 const loginU = db.logins;
 const regist = db.registrations;
 const bcrypt = require('bcryptjs')
+const { QueryTypes } = require('sequelize');
 const sequelize = require('../sequelizetempelate')
 var CryptoJS = require("crypto-js")
 /************************************************************************************************************************************** */
@@ -21,10 +22,10 @@ const forgot = async (req, res) => {
         // Encrypt
 
         console.log(ciphertext)
-        res.status(200).send({message:`Your otp for changing password is ${seq} do not share it with anyone`,data:ciphertext})
+        res.status(200).send({ message: `Your otp for changing password is ${seq} do not share it with anyone`, data: ciphertext })
 
     }
-    
+
 }
 
 const otpverify = async (req, res) => {
@@ -42,27 +43,26 @@ const otpverify = async (req, res) => {
     const passcode = req.body.password
     if (m == mobileno && otp == OTP) {
         const { value } = validateSignup(passcode)
-            const passwordHash = await bcrypt.hash(passcode, 10)
-            console.log(passwordHash);
-            
-                let employee = await regist.update({password:passwordHash,confirm_password:passwordHash}, { where: { mobile_number: mobileno } })
-                const userid=await regist.findOne({ where: { mobile_number: mobileno }})
-                console.log(userid)
-                let loginpasscode = await loginU.update({password:passwordHash}, { where: { mobile_number: mobileno } })
-                res.status(200).send({meassage:'password is changed succesfully',data:employee})
-                console.log(employee)
-            
-        
+        const passwordHash = await bcrypt.hash(passcode, 10)
+        console.log(passwordHash);
+
+        let employee = await regist.update({ password: passwordHash, confirm_password: passwordHash }, { where: { mobile_number: mobileno } })
+        const userid = await sequelize.query(`SELECT userID FROM registrations WHERE mobile_number =${mobileno}`,
+            {
+                type: QueryTypes.SELECT
+            })
+        let mappedArray = userid.map(item => item.userID);
+        const str = mappedArray.toString();
+        console.log(str)
+        let loginpasscode = await loginU.update({ password: passwordHash }, { where: { userID: str } })
+        res.status(200).send({ meassage: 'password is changed succesfully', data: employee })
+        console.log(employee)
         console.log(value);
     }
-    else 
-    {
+    else {
         res.status(400).send('invalid otp')
     }
 }
-
-
-
 module.exports = {
     forgot,
     otpverify
