@@ -41,25 +41,23 @@ const otpverify = async (req, res) => {
     const OTP = req.body.enter_otp
     const passcode = req.body.password
     if (m == mobileno && otp == OTP) {
-        const { error, value } = validateSignup(passcode)
-        if (error) {
-            console.log(error);
-            res.send(error.details)
-        }
-        else {
-
-            
-            
+        const { value } = validateSignup(passcode)
             const passwordHash = await bcrypt.hash(passcode, 10)
             console.log(passwordHash);
-            const updateEmp = async (req, res) => {
-                let employee = await regist.update({password:passwordHash}, { where: { mobile_number: mobileno } })
-                let employ = await regist.update({confirm_password:passwordHash}, { where: { mobile_number: mobileno } })
+            
+                let employee = await regist.update({password:passwordHash,confirm_password:passwordHash}, { where: { mobile_number: mobileno } })
+                const userid=await regist.findOne({ where: { mobile_number: mobileno }})
+                console.log(userid)
                 let loginpasscode = await loginU.update({password:passwordHash}, { where: { mobile_number: mobileno } })
-                res.status(200).send({meassage:'password is changed succesfully',data:employ})
-            }
-        }
+                res.status(200).send({meassage:'password is changed succesfully',data:employee})
+                console.log(employee)
+            
+        
         console.log(value);
+    }
+    else 
+    {
+        res.status(400).send('invalid otp')
     }
 }
 
