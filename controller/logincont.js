@@ -14,16 +14,16 @@ const details = async (req, res) => {
 }
 
 const credential = async (req, res) => {
-    const userID = req.body.userID
+    const email = req.body.email
     const password = req.body.password
 
-    const user = await sequelize.query(`SELECT userID,password FROM logins WHERE userID ='${userID}'`,
+    const user = await sequelize.query(`SELECT email,password FROM registrations WHERE email ='${email}'`,
         {
             type: QueryTypes.SELECT
         });
 
 
-    let uID = user.map(item => item.userID);
+    let uID = user.map(item => item.email);
     const str = uID.toString();
 
     let pass = user.map(item => item.password);
@@ -34,17 +34,17 @@ const credential = async (req, res) => {
     const compPasswordHash = await bcrypt.compare(password,passwordHash)
     console.log(compPasswordHash);
 
-    if (userID == str && compPasswordHash == true) {
+    if (email == str && compPasswordHash == true) {
 
-        let times = await addUser.findAll({})
+        let times = await addUser.findOne({where:{email:`${email}`}})
         res.status(200).send({ message: "succesfully login", data: times })
-    } else if (userID != str) {
+    } else if (email != str) {
         res.status(400).send({ message: "user not found" })
-    } else if (userID == str && compPasswordHash != true) {
+    } else if (email == str && compPasswordHash != true) {
         res.status(400).send({ message: "Invalid password" })
     }
     else {
-        res.status(400).send({ message: "userID and password didn't match" })
+        res.status(400).send({ message: "email and password didn't match" })
     }
 }
 

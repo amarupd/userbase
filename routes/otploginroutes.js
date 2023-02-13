@@ -8,3 +8,14 @@ otprouter.post("/otpLogin",dailyController.otpLogin)
 otprouter.post("/otpverify",dailyController.otpverify)
 
 module.exports=otprouter;
+
+
+
+
+
+
+
+
+
+
+
