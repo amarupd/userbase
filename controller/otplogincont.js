@@ -40,7 +40,7 @@ const otpLogin = async (req, res) => {
 const otpverify = async (req, res) => {
     console.log(`value of otp is ${seq}`);
     const mobileno = req.body.mobile_number
-    // const OTP = req.body.otp
+    const OTP = req.body.otp
     const passcode = req.body.hash
     var bytes = CryptoJS.AES.decrypt(passcode, `${seq}`);
     var originalText = bytes.toString(CryptoJS.enc.Utf8);
@@ -49,7 +49,7 @@ const otpverify = async (req, res) => {
     const otp = string[1];
     console.log(m, otp);
     
-    if (m == mobileno && seq == otp) {
+    if (m == mobileno && OTP == otp) {
         // const { value } = validateSignup(pass)
         // const passwordHash = await bcrypt.hash(pass, 10)
         // console.log(passwordHash);
