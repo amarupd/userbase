@@ -1,10 +1,10 @@
 const dailyController=require('../controller/otplogincont')
 
-const drouter=require('express').Router()
+const otprouter=require('express').Router()
 
 
-drouter.post("/otpLogin",dailyController.details)
+otprouter.post("/otpLogin",dailyController.otpLogin)
 
-drouter.post("/otpverify",dailyController.credential)
+otprouter.post("/otpverify",dailyController.otpverify)
 
-module.exports=drouter;
+module.exports=otprouter;

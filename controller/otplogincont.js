@@ -2,7 +2,7 @@ const db = require("../models")
 const addUser = db.registrations;
 const sequelize = require('../sequelizetempelate')
 var CryptoJS = require("crypto-js")
-
+const axios=require('axios')
 
 const { QueryTypes } = require('sequelize');
 
@@ -31,7 +31,7 @@ const otpLogin = async (req, res) => {
         const url = `https://bulksms.analyticsmantra.com/sendsms/sendsms.php?username=SUNSURRYA&password=tech321&type=TEXT&sender=MMSTER&mobile=${mobile_number}&message=Use%20${seq}%20as%20OTP%20to%20login%20into%20MyMaster11&PEID=1201161650796863916&HeaderId=1205161650964871534&templateId=1207161736910206136`;
         let response = await axios.get(url);
         console.log(response);
-        var ciphertext = CryptoJS.AES.encrypt(`${mobile}.${seq}`, `${seq}`).toString();
+        var ciphertext = CryptoJS.AES.encrypt(`${mobile_number}.${seq}`, `${seq}`).toString();
         console.log(ciphertext)
         res.status(200).send({ message:'otp sent succesfull',data:ciphertext})
     }
@@ -40,7 +40,7 @@ const otpLogin = async (req, res) => {
 const otpverify = async (req, res) => {
     console.log(`value of otp is ${seq}`);
     const mobileno = req.body.mobile_number
-    const OTP = req.body.enter_otp
+    // const OTP = req.body.otp
     const passcode = req.body.hash
     var bytes = CryptoJS.AES.decrypt(passcode, `${seq}`);
     var originalText = bytes.toString(CryptoJS.enc.Utf8);
@@ -49,7 +49,7 @@ const otpverify = async (req, res) => {
     const otp = string[1];
     console.log(m, otp);
     
-    if (m == mobileno && OTP == otp) {
+    if (m == mobileno && seq == otp) {
         // const { value } = validateSignup(pass)
         // const passwordHash = await bcrypt.hash(pass, 10)
         // console.log(passwordHash);
