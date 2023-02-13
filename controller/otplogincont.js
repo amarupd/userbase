@@ -4,6 +4,7 @@ const addUser = db.registrations;
 const addOtp = db.otps;
 const bcrypt = require('bcryptjs')
 const sequelize = require('../sequelizetempelate')
+var CryptoJS = require("crypto-js")
 
 
 const { QueryTypes } = require('sequelize');
@@ -13,65 +14,59 @@ const details = async (req, res) => {
     res.status(200).send(times)
 }
 
-const credential = async (req, res) => {
-    const userID = req.body.userID
-    const password = req.body.password
+var seq = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
 
-    const user = await sequelize.query(`SELECT userID,password FROM logins WHERE userID ='${userID}'`,
+const otpLogin = async (req, res) => {
+    const mobile_number = req.body.mobile_number
+    const user = await sequelize.query(`SELECT mobile_number FROM logins WHERE mobile_number ='${mobile_number}'`,
         {
             type: QueryTypes.SELECT
         });
-
-
-    let uID = user.map(item => item.userID);
+    let uID = user.map(item => item.mobile_number);
     const str = uID.toString();
 
-    let pass = user.map(item => item.password);
-    const passwordHash = pass.toString();
+    console.log(str);
 
-    console.log(str, passwordHash);
+    // const compPasswordHash = await bcrypt.compare(password,passwordHash)
+    // console.log(compPasswordHash);
 
-    const compPasswordHash = await bcrypt.compare(password,passwordHash)
-    console.log(compPasswordHash);
-
-    if (userID == str && compPasswordHash == true) {
-
-        let times = await addUser.findAll({})
-        res.status(200).send({ message: "succesfully login", data: times })
-    } else if (userID != str) {
-        res.status(400).send({ message: "user not found" })
-    } else if (userID == str && compPasswordHash != true) {
-        res.status(400).send({ message: "Invalid password" })
-    }
-    else {
-        res.status(400).send({ message: "userID and password didn't match" })
+    if (mobile_number == str) {
+        const url = `https://bulksms.analyticsmantra.com/sendsms/sendsms.php?username=SUNSURRYA&password=tech321&type=TEXT&sender=MMSTER&mobile=${mobile_number}&message=Use%20${seq}%20as%20OTP%20to%20login%20into%20MyMaster11&PEID=1201161650796863916&HeaderId=1205161650964871534&templateId=1207161736910206136`;
+        let response = await axios.get(url);
+        console.log(response);
+        var ciphertext = CryptoJS.AES.encrypt(`${mobile}.${seq}`, `${seq}`).toString();
+        console.log(ciphertext)
+        res.status(200).send({ message:'otp sent succesfull',data:ciphertext})
     }
 }
 
-const otp=async (req,res)=>{
-    const mobile_number = req.body.mobile_number 
-    const mobile = await sequelize.query(`SELECT mobile_number FROM registrations WHERE mobile_number ='${mobile_number}'`,
-        {
-            type: QueryTypes.SELECT
-        });
-        let pass = mobile.map(item => item.mobile_number);
-        const pstr = pass.toString();
-        if(pstr=='NULL')
-        {
-            res.status(400).send({message:`${pstr} is not registered with us`})
-        }
-        else{
-            const otpdetails = await addOtp.findOne({
-                where: { id: 2 }
-            });
-            console.log(otpdetails);
-            res.send({data:otpdetails})
-        }
+const otpverify = async (req, res) => {
+    console.log(`value of otp is ${seq}`);
+    const mobileno = req.body.mobile_number
+    const OTP = req.body.enter_otp
+    const passcode = req.body.hash
+    var bytes = CryptoJS.AES.decrypt(passcode, `${seq}`);
+    var originalText = bytes.toString(CryptoJS.enc.Utf8);
+    var string = originalText.split(".");
+    const m = string[0];
+    const otp = string[1];
+    console.log(m, otp);
+    
+    if (m == mobileno && OTP == otp) {
+        // const { value } = validateSignup(pass)
+        // const passwordHash = await bcrypt.hash(pass, 10)
+        // console.log(passwordHash);
 
+        let employeee = await regist.findOne({ where: { mobile_number: mobileno } })
+        res.status(200).send({ meassage: 'logged in succesfully', data: employeee })
+        console.log(employeee)
+    }
+    else {
+        res.status(400).send('invalid otp')
+    }
 }
 
 module.exports = {
-    details,
-    credential,
-    otp
+    otpLogin,
+    otpverify
 }

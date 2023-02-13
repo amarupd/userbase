@@ -13,9 +13,8 @@ const forgot = async (req, res) => {
     const mobile = req.body.mobile_number
     const url = `https://bulksms.analyticsmantra.com/sendsms/sendsms.php?username=SUNSURRYA&password=tech321&type=TEXT&sender=MMSTER&mobile=${mobile}&message=Use%20${seq}%20as%20OTP%20to%20login%20into%20MyMaster11&PEID=1201161650796863916&HeaderId=1205161650964871534&templateId=1207161736910206136`;
     let response = await axios.get(url);
-    console.log(response
-        );
-    console.log(`value   hvgcnbdfb   of otp is ${seq}`);
+    console.log(response);
+    // console.log(`value   hvgcnbdfb   of otp is ${seq}`);
     console.log(`Your otp for changing password is ${seq} do not share it with anyone`);
     var ciphertext = CryptoJS.AES.encrypt(`${mobile}.${seq}`, `${seq}`).toString();
     const user = await regist.findOne({ where: { mobile_number: mobile } })
