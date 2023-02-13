@@ -1,24 +1,21 @@
 const db = require("../models")
-const loginUser = db.logins;
 const addUser = db.registrations;
-const addOtp = db.otps;
-const bcrypt = require('bcryptjs')
 const sequelize = require('../sequelizetempelate')
 var CryptoJS = require("crypto-js")
 
 
 const { QueryTypes } = require('sequelize');
 
-const details = async (req, res) => {
-    let times = await loginUser.findAll({})
-    res.status(200).send(times)
-}
+// const details = async (req, res) => {
+//     let times = await loginUser.findAll({})
+//     res.status(200).send(times)
+// }
 
 var seq = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
 
 const otpLogin = async (req, res) => {
     const mobile_number = req.body.mobile_number
-    const user = await sequelize.query(`SELECT mobile_number FROM logins WHERE mobile_number ='${mobile_number}'`,
+    const user = await sequelize.query(`SELECT mobile_number FROM registrations WHERE mobile_number ='${mobile_number}'`,
         {
             type: QueryTypes.SELECT
         });
@@ -57,7 +54,7 @@ const otpverify = async (req, res) => {
         // const passwordHash = await bcrypt.hash(pass, 10)
         // console.log(passwordHash);
 
-        let employeee = await regist.findOne({ where: { mobile_number: mobileno } })
+        let employeee = await addUser.findOne({ where: { mobile_number: mobileno } })
         res.status(200).send({ meassage: 'logged in succesfully', data: employeee })
         console.log(employeee)
     }

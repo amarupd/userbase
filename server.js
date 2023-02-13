@@ -3,6 +3,7 @@ const router = require("./routes/loginroute");
 const srouter = require("./routes/registrationroutes");
 const lrouter = require("./routes/otproutes");
 const otprouter = require("./routes/fotgotpasswordroute");
+const otploginrouter = require("./routes/otploginroutes");
 
 // const drouter = require("./routes/dailyroute");
 const cors = require("cors");
@@ -23,6 +24,7 @@ app.use("/login", router);
 app.use("/registration", srouter);
 app.use("/otp", lrouter);
 app.use("/otpverify", otprouter);
+app.use("/otplogin", otploginrouter);
 // app.use("/time", drouter);
 app.get("", (req, res) => {
     res.json({ message: "hello from api" });
