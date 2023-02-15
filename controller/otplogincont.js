@@ -22,7 +22,7 @@ const otpLogin = async (req, res) => {
     let uID = user.map(item => item.mobile_number);
     const str = uID.toString();
 
-    console.log(str);
+    console.log(str); 
 
     // const compPasswordHash = await bcrypt.compare(password,passwordHash)
     // console.log(compPasswordHash);
