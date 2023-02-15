@@ -8,7 +8,7 @@ const otploginrouter = require("./routes/otploginroutes");
 // const drouter = require("./routes/dailyroute");
 const cors = require("cors");
 const app = express();
-const port = process.env.port || 5001;
+const port = process.env.port || 5002;
 
 var corOption = {
     origin: "http://localhost:5002",

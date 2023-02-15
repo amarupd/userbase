@@ -15,19 +15,11 @@ client.on("error", (err) => {
 
 const { QueryTypes } = require('sequelize');
 
-// const details = async (req, res) => {
-//     let times = await loginUser.findAll({})
-//     res.status(200).send(times)
-// }
-
-
 //var seq = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
 // const seq=oop;
 const otpLogin = async (req, res) => {
     var seq = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
     const mobile_number = req.body.mobile_number
-    client.set(`${mobile_number}`, 600, JSON.stringify(seq));
-    console.log(seq)
 
     const user = await sequelize.query(`SELECT mobile_number FROM registrations WHERE mobile_number ='${mobile_number}'`,
         {
@@ -37,7 +29,8 @@ const otpLogin = async (req, res) => {
     const str = uID.toString();
 
     console.log(str);
-
+    client.setex(`${mobile_number}`,600, `${seq}`);
+    console.log(seq)
     // const compPasswordHash = await bcrypt.compare(password,passwordHash)
     // console.log(compPasswordHash);
 
