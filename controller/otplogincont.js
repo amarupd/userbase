@@ -3,6 +3,15 @@ const addUser = db.registrations;
 const sequelize = require('../sequelizetempelate')
 var CryptoJS = require("crypto-js")
 const axios = require('axios')
+// const oop=require('./otpveify')
+const redis = require("redis");
+
+const redisPort = "redis://default:ovDFb4qIVC7PoaIdIDlsaE4ymM97Aaf3@redis-12561.c264.ap-south-1-1.ec2.cloud.redislabs.com:12561"
+const client = redis.createClient(redisPort);
+
+client.on("error", (err) => {
+    console.log(err);
+})
 
 const { QueryTypes } = require('sequelize');
 
@@ -11,11 +20,15 @@ const { QueryTypes } = require('sequelize');
 //     res.status(200).send(times)
 // }
 
-//  var seq = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
 
+//var seq = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
+// const seq=oop;
 const otpLogin = async (req, res) => {
-     var seq = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
+    var seq = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
     const mobile_number = req.body.mobile_number
+    client.set(`${mobile_number}`, 600, JSON.stringify(seq));
+    console.log(seq)
+
     const user = await sequelize.query(`SELECT mobile_number FROM registrations WHERE mobile_number ='${mobile_number}'`,
         {
             type: QueryTypes.SELECT
@@ -34,23 +47,37 @@ const otpLogin = async (req, res) => {
         // console.log(response);
         var ciphertext = CryptoJS.AES.encrypt(`${mobile_number}.${seq}`, `${seq}`).toString();
         console.log(ciphertext)
-        res.status(200).send({ message: 'otp sent succesfull', data: ciphertext })
+        res.status(200).send({ message: `otp is ${seq} sent succesfull`, data: ciphertext })
     }
-    else{
+    else {
         res.status(200).send(`${mobile_number} is not registered with us`)
     }
     console.log(seq);
-    // return seq;
+
 }
 
 const otpverify = async (req, res) => {
     // const seq=otpLogin();
-    console.log(seq)
-    console.log(`value of otp is ${seq}`);
+    try {
+        client.get(`${mobile_number}`,async (err, values) => {
+            if (err) throw err;
+            if (values) {
+                console.log("catched from redis");
+                const seqq=values
+            }
+            else {
+                res.status(200).send('please enter mobile number to send otp');
+            }
+        })
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    }
+    console.log(seqq)
+    console.log(`value of otp is ${seqq}`);
     const mobileno = req.body.mobile_number
     const OTP = req.body.otp
     const passcode = req.body.hash
-    var bytes = CryptoJS.AES.decrypt(passcode, `${seq}`);
+    var bytes = CryptoJS.AES.decrypt(passcode, `${seqq}`);
     var originalText = bytes.toString(CryptoJS.enc.Utf8);
     var string = originalText.split(".");
     const m = string[0];
