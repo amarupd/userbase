@@ -36,8 +36,17 @@ format:-
         "confirm_password": ""
 }
 
-2. succesfull login after otp verification
+2. get all the registered user
 
 get method here
 
 http://192.168.1.61:5001/registerUser/getAllUser
+
+for login
+1. login data
+
+http://192.168.1.61:5001/login/getlogin
+
+2.all details of all registered user
+
+http://192.168.1.61:5001/login/credential
