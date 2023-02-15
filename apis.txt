@@ -1,0 +1,43 @@
+for forgot password
+
+1. enter mobile number for otp generation
+
+http://192.168.1.61:5001/forgotPassword/enterMobileNumber
+
+2. changing the password after succesfull otp verification
+
+http://192.168.1.61:5001/forgotPassword/changePassword
+
+
+for otp login
+
+1.enter mobile number for login
+
+http://192.168.1.61:5001/otpLogin/sendOtp
+
+2. succesfull login after otp verification
+
+http://192.168.1.61:5001/otpLogin/otpVerification
+
+
+for registration of user
+
+1.registering user
+
+http://192.168.1.61:5001/registerUser/addUser
+
+format:-
+{
+        "fullname": "",
+        "email": "",
+        "mobile_number": "",
+        "userID": "",
+        "password": "",
+        "confirm_password": ""
+}
+
+2. succesfull login after otp verification
+
+get method here
+
+http://192.168.1.61:5001/registerUser/getAllUser

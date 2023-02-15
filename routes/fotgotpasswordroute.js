@@ -2,8 +2,8 @@ const dailyController=require('../controller/forgotpassword')
 
 const drouter=require('express').Router()
 
-drouter.post("/forgot",dailyController.forgot)
+drouter.post("/enterMobileNumber",dailyController.forgot)
 
-drouter.post("/otpverify",dailyController.otpverify)
+drouter.post("/changePassword",dailyController.otpverify)
 
 module.exports=drouter;

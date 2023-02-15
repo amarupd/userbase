@@ -21,10 +21,10 @@ app.use(express.urlencoded({ extended: true }));
 
 
 app.use("/login", router);
-app.use("/registration", srouter);
+app.use("/registerUser", srouter);
 app.use("/otp", lrouter);
-app.use("/otpverify", otprouter);
-app.use("/otplogin", otploginrouter);
+app.use("/forgotPassword", otprouter);
+app.use("/otpLogin", otploginrouter);
 // app.use("/time", drouter);
 app.get("", (req, res) => {
     res.json({ message: "hello from api" });
