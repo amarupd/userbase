@@ -54,12 +54,12 @@ const otpverify = async (req, res) => {
 
     const getAsync = promisify(client.get).bind(client);
     const value = await getAsync(`${mobileno}`);
-    console.log(value);
-    console.log(`value from redis is ${value}`);
+    // console.log(value);
+    // console.log(`value from redis is ${value}`);
     var bytes = CryptoJS.AES.decrypt(value,`${OTP}`);
     var originalText = bytes.toString(CryptoJS.enc.Utf8);
     var string = originalText.split(".");
-    console.log(`string is ${string}`)
+    // console.log(`string is ${string}`)
     const m = string[0];
     const otp = string[1];
     console.log(m, otp);
