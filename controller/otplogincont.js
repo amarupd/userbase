@@ -20,14 +20,12 @@ const { QueryTypes } = require('sequelize');
 const otpLogin = async (req, res) => {
     var seq = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
     const mobile_number = req.body.mobile_number
-
     const user = await sequelize.query(`SELECT mobile_number FROM registrations WHERE mobile_number ='${mobile_number}'`,
         {
             type: QueryTypes.SELECT
         });
     let uID = user.map(item => item.mobile_number);
     const str = uID.toString();
-
     console.log(str);
     
     console.log(seq)
@@ -53,13 +51,13 @@ const otpLogin = async (req, res) => {
 
 const otpverify = async (req, res) => {
     // const seq=otpLogin();
-    
+    console.log('hitted otp verification');
     const mobileno = req.body.mobile_number
-    let results =client.get(mobileno);
+    let results =client.get(`${mobileno}`);
     console.log(`what fetched from redis is ${results}`)
     const OTP = req.body.otp
     const passcode = req.body.hash
-    var bytes = CryptoJS.AES.decrypt(passcode, `${results}`);
+    var bytes = CryptoJS.AES.decrypt(passcode, `${OTP}`);
     console.log(`bytes is ${bytes}`);
     var originalText = bytes.toString(CryptoJS.enc.Utf8);
     console.log(`bytes is ${originalText}`);
