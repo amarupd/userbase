@@ -40,7 +40,7 @@ const otpLogin = async (req, res) => {
         // console.log(response);
         var ciphertext = CryptoJS.AES.encrypt(`${mobile_number}.${seq}`, `${seq}`).toString();
         console.log(ciphertext)
-        client.setex(`${mobile_number}`,600, `${ciphertext}`);
+        client.setex(mobile_number,600, `${ciphertext}`);
         res.status(200).send({ message: `otp is ${seq} sent succesfull`, data: ciphertext })
         console.log(`otp sent succesfull ${seq}`);
     }
@@ -55,7 +55,7 @@ const otpverify = async (req, res) => {
     // const seq=otpLogin();
     
     const mobileno = req.body.mobile_number
-    let results =client.get(`${mobile_number}`,async (values)=>{});
+    let results =client.get(mobileno);
     console.log(`what fetched from redis is ${results}`)
     const OTP = req.body.otp
     const passcode = req.body.hash
