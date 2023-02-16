@@ -24,7 +24,7 @@ const forgot = async (req, res) => {
     // console.log(response);
     // console.log(`value   hvgcnbdfb   of otp is ${seq}`);
     console.log(`Your otp for changing password is ${seq} do not share it with anyone`);
-    var ciphertext = CryptoJS.AES.encrypt(`${mobile}.${seq}`, `${seq}`).toString();
+    var ciphertext = CryptoJS.AES.encrypt(`${mobile}.${seq}`, `key`).toString();
     client.setex(mobile,600, `${ciphertext}`);
     const user = await regist.findOne({ where: { mobile_number: mobile } })
     console.log(user)
@@ -35,7 +35,7 @@ const forgot = async (req, res) => {
         // Encrypt
 
         console.log(ciphertext)
-        res.status(200).send({ message:'otp sent succesfull',data:ciphertext})
+        res.status(200).send({ message:`otp sent succesfull ${seq}`,data:ciphertext})
 
     }
 
@@ -47,7 +47,7 @@ const otpverify = async (req, res) => {
     const OTP = req.body.enter_otp
     const pass = req.body.password
     let results =client.get(`${mobileno}`);
-    var bytes = CryptoJS.AES.decrypt(results,`${OTP}`);
+    var bytes = CryptoJS.AES.decrypt(results,`key`);
     var originalText = bytes.toString(CryptoJS.enc.Utf8);
     var string = originalText.split(".");
     const m = string[0];
