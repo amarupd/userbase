@@ -29,7 +29,7 @@ const otpLogin = async (req, res) => {
     const str = uID.toString();
 
     console.log(str);
-    client.setex(`${mobile_number}`,600, `${seq}`);
+    
     console.log(seq)
     // const compPasswordHash = await bcrypt.compare(password,passwordHash)
     // console.log(compPasswordHash);
@@ -40,38 +40,29 @@ const otpLogin = async (req, res) => {
         // console.log(response);
         var ciphertext = CryptoJS.AES.encrypt(`${mobile_number}.${seq}`, `${seq}`).toString();
         console.log(ciphertext)
+        client.setex(`${mobile_number}`,600, `${ciphertext}`);
         res.status(200).send({ message: `otp is ${seq} sent succesfull`, data: ciphertext })
+        console.log(`otp sent succesfull ${seq}`);
     }
     else {
         res.status(200).send(`${mobile_number} is not registered with us`)
+        console.log(`${mobile_number} is not registered with us`);
     }
-    console.log(seq);
 
 }
 
 const otpverify = async (req, res) => {
     // const seq=otpLogin();
-    try {
-        client.get(`${mobile_number}`,async (err, values) => {
-            if (err) throw err;
-            if (values) {
-                console.log("catched from redis");
-                const seqq=values
-            }
-            else {
-                res.status(200).send('please enter mobile number to send otp');
-            }
-        })
-    } catch (err) {
-        res.status(500).send({ message: err.message });
-    }
-    console.log(seqq)
-    console.log(`value of otp is ${seqq}`);
+    
     const mobileno = req.body.mobile_number
+    let results =client.get(`${mobile_number}`,async (values)=>{});
+    console.log(`what fetched from redis is ${results}`)
     const OTP = req.body.otp
     const passcode = req.body.hash
-    var bytes = CryptoJS.AES.decrypt(passcode, `${seqq}`);
+    var bytes = CryptoJS.AES.decrypt(passcode, `${results}`);
+    console.log(`bytes is ${bytes}`);
     var originalText = bytes.toString(CryptoJS.enc.Utf8);
+    console.log(`bytes is ${originalText}`);
     var string = originalText.split(".");
     const m = string[0];
     const otp = string[1];
