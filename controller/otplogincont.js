@@ -55,7 +55,7 @@ const otpverify = async (req, res) => {
     console.log(`what fetched from redis is ${results}`)
     const OTP = req.body.otp
     const passcode = req.body.hash
-    var bytes = CryptoJS.AES.decrypt(passcode, `${OTP}`);
+    var bytes = CryptoJS.AES.decrypt(passcode,`${OTP}`);
     console.log(`bytes is ${bytes}`);
     var originalText = bytes.toString(CryptoJS.enc.Utf8);
     console.log(`original text is ${originalText}`);

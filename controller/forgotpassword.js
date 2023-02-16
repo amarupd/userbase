@@ -46,8 +46,11 @@ const otpverify = async (req, res) => {
     const mobileno = req.body.mobile_number
     const OTP = req.body.enter_otp
     const pass = req.body.password
-    let results =client.get(`${mobileno}`);
-    console.log(results);
+    let results =client.get(`${mobileno}`,(err,value)=>{
+        console.log(value);
+        return value;
+    });
+    console.log(`value from redis is ${results}`);
     var bytes = CryptoJS.AES.decrypt(results,`${OTP}`);
     var originalText = bytes.toString(CryptoJS.enc.Utf8);
     var string = originalText.split(".");
