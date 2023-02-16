@@ -1,0 +1,13 @@
+const redis = require("redis");
+const { promisify } = require('util');
+const redisPort = "redis://default:ovDFb4qIVC7PoaIdIDlsaE4ymM97Aaf3@redis-12561.c264.ap-south-1-1.ec2.cloud.redislabs.com:12561"
+const client = redis.createClient(redisPort);
+
+client.on("error", (err) => {
+    console.log(err);
+})
+
+    const getAsync = promisify(client.get).bind(client);
+    const value = await getAsync(`${mobileno}`);
+    console.log(value);
+    console.log(`value from redis is ${value}`);
