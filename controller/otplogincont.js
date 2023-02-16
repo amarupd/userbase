@@ -4,6 +4,7 @@ const sequelize = require('../sequelizetempelate')
 var CryptoJS = require("crypto-js")
 const axios = require('axios')
 const redis = require("redis");
+const { promisify } = require('util');
 const redisPort = "redis://default:ovDFb4qIVC7PoaIdIDlsaE4ymM97Aaf3@redis-12561.c264.ap-south-1-1.ec2.cloud.redislabs.com:12561"
 const client = redis.createClient(redisPort);
 
@@ -25,7 +26,7 @@ const otpLogin = async (req, res) => {
     let uID = user.map(item => item.mobile_number);
     const str = uID.toString();
     console.log(str);
-    
+
     console.log(seq)
     // const compPasswordHash = await bcrypt.compare(password,passwordHash)
     // console.log(compPasswordHash);
@@ -36,7 +37,7 @@ const otpLogin = async (req, res) => {
         // console.log(response);
         var ciphertext = CryptoJS.AES.encrypt(`${mobile_number}.${seq}`, `${seq}`).toString();
         console.log(ciphertext)
-        client.setex(mobile_number,600, `${ciphertext}`);
+        client.setex(mobile_number, 600, `${ciphertext}`);
         res.status(200).send({ message: `otp is ${seq} sent succesfull`, data: ciphertext })
         console.log(`otp sent succesfull ${seq}`);
     }
@@ -51,31 +52,42 @@ const otpverify = async (req, res) => {
     // const seq=otpLogin();
     console.log('hitted otp verification');
     const mobileno = req.body.mobile_number
-    let results =client.get(`${mobileno}`);
-    console.log(`what fetched from redis is ${results}`)
+    // let results =client.get(`${mobileno}`);
+    // console.log(`what fetched from redis is ${results}`)
+
+    const getAsync = promisify(client.get).bind(client);
+    const value = await getAsync(`${mobileno}`);
+    console.log(value);
+    console.log(`value from redis is ${value}`);
+
     const OTP = req.body.otp
     const passcode = req.body.hash
-    var bytes = CryptoJS.AES.decrypt(passcode,`${OTP}`);
-    console.log(`bytes is ${bytes}`);
-    var originalText = bytes.toString(CryptoJS.enc.Utf8);
-    console.log(`original text is ${originalText}`);
-    var string = originalText.split(".");
-    const m = string[0];
-    const otp = string[1];
-    console.log(m, otp);
 
-    if (m == mobileno && OTP == otp) {
-        // const { value } = validateSignup(pass)
-        // const passwordHash = await bcrypt.hash(pass, 10)
-        // console.log(passwordHash);
+    if (value === passcode) {
+        var bytes = CryptoJS.AES.decrypt(value, `${OTP}`);
+        console.log(`bytes is ${bytes}`);
+        var originalText = bytes.toString(CryptoJS.enc.Utf8);
+        console.log(`original text is ${originalText}`);
+        var string = originalText.split(".");
+        const m = string[0];
+        const otp = string[1];
+        console.log(m, otp);
 
-        let employeee = await addUser.findOne({ where: { mobile_number: mobileno } })
-        res.status(200).send({ meassage: 'logged in succesfully', data: employeee })
-        console.log(employeee)
+        if (m == mobileno && OTP == otp) {
+            // const { value } = validateSignup(pass)
+            // const passwordHash = await bcrypt.hash(pass, 10)
+            // console.log(passwordHash);
+
+            let employeee = await addUser.findOne({ where: { mobile_number: mobileno } })
+            res.status(200).send({ meassage: 'logged in succesfully', data: employeee })
+            console.log(employeee)
+        }
+        else {
+            res.status(400).send('invalid otp')
+        }
     }
-    else {
-        res.status(400).send('invalid otp')
-    }
+
+
 }
 
 module.exports = {
