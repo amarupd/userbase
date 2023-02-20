@@ -5,7 +5,9 @@ const otprouter=require('express').Router()
 
 otprouter.post("/sendOtp",dailyController.otpLogin)
 
-otprouter.post("/otpVerification",dailyController.otpverify)
+//otprouter.post("/otpVerification",dailyController.otpverify)
+
+otprouter.get("/sendOtp",dailyController.otpverify)
 
 module.exports=otprouter;
 
