@@ -3,9 +3,9 @@ const dailyController=require('../controller/registrationcont')
 const drouter=require('express').Router()
 
 
-drouter.post("/addUser",dailyController.adduser)
+drouter.post("/user",dailyController.adduser)
 
-drouter.get("/getAllUser",dailyController.details)
+drouter.get("/user",dailyController.details)
 
 
 module.exports=drouter;
